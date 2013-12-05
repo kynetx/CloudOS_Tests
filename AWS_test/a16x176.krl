@@ -70,11 +70,11 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
   rule handle_autoraise {
     select when http put
     pre {
-      result = event:attrs().encode();
+      putresult = event:attrs().encode();
     }
     noop();
     always {
-      log "upload response " + result;
+      log "upload result " + putresult;
     }
   }
 }
