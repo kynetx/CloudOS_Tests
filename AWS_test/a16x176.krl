@@ -46,6 +46,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
       imgURL    = "https://s3.amazonaws.com/#{S3Bucket}/#{thisRID}/#{myECI}.img?q=#{seed}" ;
       imgValue  = this2that:base642string(AWSS3:getValue(test_img)) ;
       imgType   = AWSS3:getType(test_img) ;
+      aak = "0GEYA8DTVCB3XHM819R2";
 
       values = {
         'imgName': imgName,
@@ -75,7 +76,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
 
 			headers = {
 				//"Authorization" : "AWS "+keys:aws("AWSAccessKey")+":"+signedString,
-				"Authorization" : "AWS 0GEYA8DTVCB3XHM819R2:"+signedString,                                  "AWSAccessKey"
+				"Authorization" : "AWS " + aak + ":" + signedString,                              
 				"Content-Type" : object_type,
 				"Content-Transfer-Encoding" : "base64",
 				"x-amz-date" : requestTime,
