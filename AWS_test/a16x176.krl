@@ -48,8 +48,8 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
 
     }
     {
-       AWSS3:upload(S3Bucket, imgName, imgValue)
-         with object_type = imgType;
+//       AWSS3:upload(S3Bucket, imgName, imgValue)
+//         with object_type = imgType;
        send_raw("application/json")
 	 with content = values.encode();
     }
