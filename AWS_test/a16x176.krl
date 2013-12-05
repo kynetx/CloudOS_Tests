@@ -37,7 +37,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
     select when test store_image
     pre {
 
-      requestTime = time:strftime(time:new({time_zone  => 'UTC'}), "%a, %d %b %Y %T GMT");
+      requestTime = time:strftime(time:new({"tz" : "UTC"}), "%a, %d %b %Y %T GMT");
 
       myECI     = math:random(99999999);
       imgName   = "#{thisRID}/#{myECI}.img";
