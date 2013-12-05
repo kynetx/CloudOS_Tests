@@ -66,4 +66,15 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
        log "Response " + response;
     }   
   }
+
+  rule handle_autoraise {
+    select when http put
+    pre {
+      result = event:attrs().encode();
+    }
+    noop();
+    always {
+      log "upload response " + result;
+    }
+  }
 }
