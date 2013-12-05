@@ -5,15 +5,15 @@ ruleset a16x176 {
 Test the AWS module, a41x174
     >>
     author "Phil Windley"
-    logging on
-     // key aws {
-     //   "AWSAccessKey": "0GEYA8DTVCB3XHM819R2",
-     //   "AWSSecretKey": "I4TrjKcflLnchhsEzjlNju/s9EHiqdOScbyqGgn+"
-     // }
+    logging 
     key aws {
-      "AWSAccessKey": "AKIAJLEPWJXPO5F6KVYA",
-      "AWSSecretKey": "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"
+       "AWSAccessKey": "0GEYA8DTVCB3XHM819R2",
+       "AWSSecretKey": "I4TrjKcflLnchhsEzjlNju/s9EHiqdOScbyqGgn+"
     }
+     // key aws {
+     //   "AWSAccessKey": "AKIAJLEPWJXPO5F6KVYA",
+     //   "AWSSecretKey": "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"
+     // }
     use module a169x701 alias CloudRain
     use module a41x174 alias AWSS3
       with AWSKeys = keys:aws()
@@ -37,6 +37,8 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
     select when test store_image
     pre {
 
+      requestTime = time:strftime(time:new(), "%a, %d %b %Y %T GMT");
+
       myECI     = math:random(99999999);
       imgName   = "#{thisRID}/#{myECI}.img";
       seed      = math:random(100000);
@@ -47,7 +49,8 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
       values = {
         'imgName': imgName,
 	'imgURL' : imgURL,
-	'imgType': imgType
+	'imgType': imgType,
+ 	'requestTime' : requestTime
       };
 
     }
