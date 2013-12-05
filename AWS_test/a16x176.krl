@@ -6,9 +6,13 @@ Test the AWS module, a41x174
     >>
     author "Phil Windley"
     logging on
+     // key aws {
+     //   "AWSAccessKey": "0GEYA8DTVCB3XHM819R2",
+     //   "AWSSecretKey": "I4TrjKcflLnchhsEzjlNju/s9EHiqdOScbyqGgn+"
+     // }
     key aws {
-      "AWSAccessKey": "0GEYA8DTVCB3XHM819R2",
-      "AWSSecretKey": "I4TrjKcflLnchhsEzjlNju/s9EHiqdOScbyqGgn+"
+      "AWSAccessKey": "AKIAJLEPWJXPO5F6KVYA",
+      "AWSSecretKey": "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"
     }
     use module a169x701 alias CloudRain
     use module a41x174 alias AWSS3
