@@ -37,8 +37,8 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
       imgName   = "#{thisRID}/#{myECI}.img";
       seed      = math:random(100000);
       imgURL    = "https://s3.amazonaws.com/#{S3Bucket}/#{thisRID}/#{myECI}.img?q=#{seed}" ;
-      imgValue  = this2that:base642string(AWSS3:getValue(imgSource)) ;
-      imgType   = AWSS3:getType(imgSource) ;
+      imgValue  = this2that:base642string(AWSS3:getValue(test_img)) ;
+      imgType   = AWSS3:getType(test_img) ;
 
       values = {
         'imgName': imgName,
