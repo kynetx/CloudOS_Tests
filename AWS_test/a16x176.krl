@@ -40,10 +40,18 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
       imgValue  = this2that:base642string(AWSS3:getValue(imgSource)) ;
       imgType   = AWSS3:getType(imgSource) ;
 
+      values = {
+        'imgName': imgName,
+	'imgURL' : imgURL,
+	'imgType': imgType
+      };
+
     }
     {
        AWSS3:upload(S3Bucket, imgName, imgValue)
          with object_type = imgType;
+       send_raw("application/json")
+	 with content = values.encode();
     }
     always {
        raise explicit event store_image_complete
