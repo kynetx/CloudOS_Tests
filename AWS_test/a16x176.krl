@@ -37,7 +37,8 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
     select when test store_image
     pre {
 
-      requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T GMT");
+      //requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T GMT");
+      requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T %z");
 
       myECI     = math:random(99999999);
       imgName   = "#{thisRID}/#{myECI}.img";
@@ -55,6 +56,13 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
 
       object_type = "text/plain";
       acl = "public-read";
+      
+      // meh
+      bucket = S3Bucket;
+      object_name = imgName;
+      object_value = imgValue;
+      // meh
+
 
       // Example date: Wed, 28 Mar 2007 01:29:59 +0000
 			
@@ -73,9 +81,9 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
 				"x-amz-acl": acl
 			};
 
-     bucket = S3Bucket;
-     object_name = imgName;
-     object_value = imgValue;
+     //bucket = S3Bucket;
+     //object_name = imgName;
+     //object_value = imgValue;
 }
 {
 	http:put("http://s3.amazonaws.com/"+bucket+"/"+object_name) setting (response)
