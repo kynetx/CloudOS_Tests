@@ -74,7 +74,8 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
       signedString = AWSS3:getSignatureString("PUT", bucket, object_name, object_value, object_type, requestTime, acl);
 
 			headers = {
-				"Authorization" : "AWS "+keys:aws("AWSAccessKey")+":"+signedString,
+				//"Authorization" : "AWS "+keys:aws("AWSAccessKey")+":"+signedString,
+				"Authorization" : "AWS 0GEYA8DTVCB3XHM819R2:"+signedString,                                  "AWSAccessKey"
 				"Content-Type" : object_type,
 				"Content-Transfer-Encoding" : "base64",
 				"x-amz-date" : requestTime,
