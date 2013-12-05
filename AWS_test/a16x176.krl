@@ -5,7 +5,7 @@ ruleset a16x176 {
 Test the AWS module, a41x174
     >>
     author "Phil Windley"
-    logging off
+    logging on
     key aws {
       "AWSAccessKey": "0GEYA8DTVCB3XHM819R2",
       "AWSSecretKey": "I4TrjKcflLnchhsEzjlNju/s9EHiqdOScbyqGgn+"
