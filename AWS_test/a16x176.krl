@@ -93,7 +93,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
     always {
        raise explicit event store_image_complete;
        log "Seeing " + values.encode();
-       log "Response " + response;
+       log "Response " + response.encode();
     }   
   }
 
