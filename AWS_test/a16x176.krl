@@ -53,13 +53,43 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
  	'requestTime' : requestTime
       };
 
+      object_type = "text/plain";
+      acl = "public-read";
+
+      // Example date: Wed, 28 Mar 2007 01:29:59 +0000
+			
+//            requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T GMT");
+            
+
+			// Based on http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTObjectOps.html
+
+      signedString = AWSS3:getSignatureString("PUT", bucket, object_name, object_value, object_type, requestTime, acl);
+
+			headers = {
+				"Authorization" : "AWS "+AWSKeys{"AWSAccessKey"}+":"+signedString,
+				"Content-Type" : object_type,
+				"Content-Transfer-Encoding" : "base64",
+				"x-amz-date" : requestTime,
+				"x-amz-acl": acl
+			};
+
+     bucket = S3Bucket;
+     object_name = imgName;
+     object_value = imgValue;
+}
+{
+	http:put("http://s3.amazonaws.com/"+bucket+"/"+object_name) setting (response)
+          with body = object_value
+          and headers = headers
+          and autoraise = 'S3_upload';
+
     }
-    {
-       AWSS3:upload(S3Bucket, imgName, imgValue)
-         with object_type = imgType;
-       send_raw("application/json")
-	 with content = values.encode();
-    }
+     // {
+     //    AWSS3:upload(S3Bucket, imgName, imgValue)
+     //      with object_type = imgType;
+     //    send_raw("application/json")
+     // 	 with content = values.encode();
+     // }
     always {
        raise explicit event store_image_complete;
        log "Seeing " + values.encode();
@@ -68,11 +98,10 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
   }
 
   rule handle_autoraise {
-    select when http put
+    select when http post
     pre {
       putresult = event:attrs().encode();
     }
-    noop();
     always {
       log "upload result " + putresult;
     }
