@@ -94,7 +94,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
         'status': 'success'
       };
 
-      getImgValue = http:get(imgURL);
+      getImgValue = http:get(imgURL).pick("$.content");
     }
 
     if(getImgValue eq imgValue) then
