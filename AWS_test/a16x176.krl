@@ -55,7 +55,8 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
       requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T %z");
 
       image_id  = math:random(99999999);
-      imgURL    = AWSS3:makeAwsUrl(S3Bucket,makeImgName(image_id));
+      imgName   = makeImgName(image_id);
+      imgURL    = AWSS3:makeAwsUrl(S3Bucket,imgName);
 
       values = {
         'image_id': image_id,
@@ -83,7 +84,8 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
     pre {
 
       image_id = event:attr("image_id");
-      imgURL    = AWSS3:makeAwsUrl(S3Bucket,makeImgName(image_id));
+      imgName   = makeImgName(image_id);
+      imgURL    = AWSS3:makeAwsUrl(S3Bucket,imgName);
 
       requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T %z");
 
