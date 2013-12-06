@@ -82,7 +82,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
 
 
   rule compare_image {
-   select when test store_image_complete
+   select when explicit store_image_complete
    pre {
 
       image_id = event:attr("image_id");
