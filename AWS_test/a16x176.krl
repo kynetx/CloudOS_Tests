@@ -80,7 +80,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
   }
 
   rule delete_image is active {
-    select when test store_delete
+    select when test delete_image
     pre {
 
       image_id = event:attr("image_id");
