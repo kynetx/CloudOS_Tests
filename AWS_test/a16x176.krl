@@ -59,6 +59,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
       imgURL    = AWSS3:makeAwsUrl(S3Bucket,imgName);
 
       values = {
+        'type' : 'UPLOAD',
         'image_id': image_id,
 	'imgURL' : imgURL,
 	'imgType': imgType,
@@ -118,6 +119,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
       requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T %z");
 
       values = {
+        'type' : 'DELETE',
         'image_id': image_id,
 	'imgURL' : imgURL,
 	'imgType': imgType,
