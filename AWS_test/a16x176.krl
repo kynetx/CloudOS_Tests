@@ -6,15 +6,19 @@ Test the AWS module, a41x174
     >>
     author "Phil Windley"
     logging on
+    
     key aws {
        "AWSAccessKey": "0GEYA8DTVCB3XHM819R2",
        "AWSSecretKey": "I4TrjKcflLnchhsEzjlNju/s9EHiqdOScbyqGgn+"
     }
+    
      // key aws {
      //   "AWSAccessKey": "AKIAJLEPWJXPO5F6KVYA",
      //   "AWSSecretKey": "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"
      // }
+     
     use module a169x701 alias CloudRain
+    
     use module a41x174 alias AWSS3
       with AWSKeys = keys:aws()
   }
@@ -37,7 +41,8 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
     select when test store_image
     pre {
 
-      requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T GMT");
+      //requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T GMT");
+      requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T %z");
 
       myECI     = math:random(99999999);
       imgName   = "#{thisRID}/#{myECI}.img";
@@ -45,6 +50,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
       imgURL    = "https://s3.amazonaws.com/#{S3Bucket}/#{thisRID}/#{myECI}.img?q=#{seed}" ;
       imgValue  = this2that:base642string(AWSS3:getValue(test_img)) ;
       imgType   = AWSS3:getType(test_img) ;
+      aak = "0GEYA8DTVCB3XHM819R2";
 
       values = {
         'imgName': imgName,
