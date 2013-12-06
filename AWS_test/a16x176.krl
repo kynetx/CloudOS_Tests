@@ -6,15 +6,19 @@ Test the AWS module, a41x174
     >>
     author "Phil Windley"
     logging on
+    
     key aws {
        "AWSAccessKey": "0GEYA8DTVCB3XHM819R2",
        "AWSSecretKey": "I4TrjKcflLnchhsEzjlNju/s9EHiqdOScbyqGgn+"
     }
+    
      // key aws {
      //   "AWSAccessKey": "AKIAJLEPWJXPO5F6KVYA",
      //   "AWSSecretKey": "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"
      // }
+     
     use module a169x701 alias CloudRain
+    
     use module a41x174 alias AWSS3
       with AWSKeys = keys:aws()
   }
@@ -67,14 +71,11 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
 
       // Example date: Wed, 28 Mar 2007 01:29:59 +0000
 			
-//            requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T GMT");
-            
 
-			// Based on http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTObjectOps.html
+      //signedString = AWSS3:getSignatureString("PUT", bucket, object_name, object_value, object_type, requestTime, acl);
+      signedString = a41x174:getSignatureString("PUT", bucket, object_name, object_value, object_type, requestTime, acl);              
 
-      signedString = AWSS3:getSignatureString("PUT", bucket, object_name, object_value, object_type, requestTime, acl);
-
-			headers = {
+		headers = {
 				//"Authorization" : "AWS "+keys:aws("AWSAccessKey")+":"+signedString,
 				"Authorization" : "AWS " + aak + ":" + signedString,                              
 				"Content-Type" : object_type,
