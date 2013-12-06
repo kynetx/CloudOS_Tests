@@ -36,12 +36,11 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
       S3Bucket = "k_s3_test";
       thisRID = meta:rid();
 
-      myECI     = math:random(99999999);
 
-      imgName   = "#{thisRID}/#{myECI}.img";
+      makeImgName   = function(name) {
+         "#{thisRID}/#{name}.img";
+      };
       seed      = math:random(100000);
-      imgURL    = AWSS3:makeAwsUrl(S3Bucket,imgName);
-//      imgURL    = "https://s3.amazonaws.com/#{S3Bucket}/"+imgName+"?q=#{seed}" ;
       imgValue  = this2that:base642string(AWSS3:getValue(test_img)) ;
       imgType   = AWSS3:getType(test_img) ;
 
@@ -55,8 +54,11 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
       //requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T GMT");
       requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T %z");
 
+      image_id  = math:random(99999999);
+      imgURL    = AWSS3:makeAwsUrl(S3Bucket,makeImgName(image_id));
+
       values = {
-        'imgName': imgName,
+        'image_id': image_id,
 	'imgURL' : imgURL,
 	'imgType': imgType,
  	'requestTime' : requestTime
@@ -65,6 +67,36 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
 
     {
        AWSS3:upload(S3Bucket, imgName, imgValue) setting (response)
+         with object_type = imgType;
+       send_raw("application/json")
+    	 with content = values.encode();
+    }
+    always {
+       raise explicit event store_image_complete
+         with image_id = image_id;
+       log "Seeing " + values.encode();
+    }   
+  }
+
+  rule delete_image is active {
+    select when test store_delete
+    pre {
+
+      image_id = event:attr("image_id");
+      imgURL    = AWSS3:makeAwsUrl(S3Bucket,makeImgName(image_id));
+
+      requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T %z");
+
+      values = {
+        'image_id': image_id,
+	'imgURL' : imgURL,
+	'imgType': imgType,
+ 	'requestTime' : requestTime
+      };
+    }
+
+    {
+       AWSS3:delete(S3Bucket, imgName) setting (response)
          with object_type = imgType;
        send_raw("application/json")
     	 with content = values.encode();
