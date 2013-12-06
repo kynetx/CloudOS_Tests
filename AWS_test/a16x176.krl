@@ -98,7 +98,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
     }
 
     {
-       AWSS3:delete(S3Bucket, imgName) setting (response)
+       AWSS3:del(S3Bucket, imgName) setting (response)
          with object_type = imgType;
        send_raw("application/json")
     	 with content = values.encode();
