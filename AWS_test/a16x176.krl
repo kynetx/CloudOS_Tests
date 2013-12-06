@@ -88,19 +88,19 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFQCAYAAACSzOQVAAAEJGlDQ1BJQ0
      //object_name = imgName;
      //object_value = imgValue;
 }
-{
-	http:put("http://s3.amazonaws.com/"+bucket+"/"+object_name) setting (response)
-          with body = object_value
-          and headers = headers
-          and autoraise = 'S3_upload';
-
-    }
-     // {
-     //    AWSS3:upload(S3Bucket, imgName, imgValue)
-     //      with object_type = imgType;
-     //    send_raw("application/json")
-     // 	 with content = values.encode();
-     // }
+//{
+//	http:put("http://s3.amazonaws.com/"+bucket+"/"+object_name) setting (response)
+//          with body = object_value
+//          and headers = headers
+//          and autoraise = 'S3_upload';
+////
+//    }
+      {
+        AWSS3:upload(S3Bucket, imgName, imgValue)
+           with object_type = imgType;
+         send_raw("application/json")
+      	 with content = values.encode();
+      }
     always {
        raise explicit event store_image_complete;
        log "Seeing " + values.encode();
