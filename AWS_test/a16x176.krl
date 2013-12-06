@@ -47,7 +47,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
 
   }
 
-  rule store_image is active {
+  rule store_image {
     select when test store_image
     pre {
 
@@ -79,7 +79,35 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
     }   
   }
 
-  rule delete_image is active {
+
+  rule compare_image {
+   select when test store_image_complete
+   pre {
+
+      image_id = event:attr("image_id");
+      imgName   = makeImgName(image_id);
+      imgURL    = AWSS3:makeAwsUrl(S3Bucket,imgName);
+
+      values = {
+	'imgURL' : imgURL,
+        'status': 'success'
+      };
+
+      getImgValue = http:get(imgURL);
+    }
+
+    if(getImgValue eq imgValue) then
+       send_raw("application/json")
+    	 with content = values.encode();
+    fired {
+      log "Retrieved value equals sent value";
+    } else {
+      log "Value mismatch";
+    }      
+
+  }
+
+  rule delete_image {
     select when test delete_image
     pre {
 
