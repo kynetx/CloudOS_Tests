@@ -37,67 +37,78 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
       thisRID = meta:rid();
 
 
-      makeImgName   = function(name) {
+      makeItemName   = function(name) {
          "#{thisRID}/#{name}.img";
       };
-      seed      = math:random(100000);
+
+
+
       imgValue  = this2that:base642string(AWSS3:getValue(test_img)) ;
       imgType   = AWSS3:getType(test_img) ;
 
 
+      stringValue = "Now is the time for all good men to come to the aid of their country!"
+      stringType = "text/plain";
+
+      // change string to img to try images (comparison not working)
+      itemValue = stringValue;
+      itemType = stringType;
+
+
   }
 
-  rule store_image {
-    select when test store_image
+  rule store_item {
+    select when test store_item
     pre {
 
       //requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T GMT");
       requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T %z");
 
-      image_id  = math:random(99999999);
-      imgName   = makeImgName(image_id);
-      imgURL    = AWSS3:makeAwsUrl(S3Bucket,imgName);
+      item_id  = math:random(99999999);
+      itemName   = makeItemName(item_id);
+      itemURL    = AWSS3:makeAwsUrl(S3Bucket,itemName);
+
 
       values = {
         'type' : 'UPLOAD',
-        'image_id': image_id,
-	'imgURL' : imgURL,
-	'imgType': imgType,
+        'item_id': item_id,
+	'itemURL' : itemURL,
+	'itemType': itemType,
  	'requestTime' : requestTime
       };
     }
 
     {
-       AWSS3:upload(S3Bucket, imgName, imgValue) setting (response)
+       AWSS3:upload(S3Bucket, itemName, itemValue) setting (response)
          with object_type = imgType;
        send_raw("application/json")
     	 with content = values.encode();
     }
     always {
-       raise explicit event store_image_complete
-         with image_id = image_id;
+       raise explicit event store_item_complete
+         with item_id = item_id;
        log "Seeing " + values.encode();
     }   
   }
 
 
-  rule compare_image {
-   select when explicit store_image_complete
+  rule compare_item {
+   select when explicit store_item_complete
    pre {
 
-      image_id = event:attr("image_id");
-      imgName   = makeImgName(image_id);
-      imgURL    = AWSS3:makeAwsUrl(S3Bucket,imgName);
+      item_id = event:attr("item_id");
+      itemName   = makeItemName(item_id);
+      itemURL    = AWSS3:makeAwsUrl(S3Bucket,itemName);
 
       values = {
-	'imgURL' : imgURL,
+	'itemURL' : itemURL,
         'status': 'success'
       };
 
-      getImgValue = http:get(imgURL).pick("$.content");
+      getItemValue = http:get(itemURL).pick("$.content");
     }
 
-    if(getImgValue eq imgValue) then
+    if(getItemValue eq itemValue) then
        send_raw("application/json")
     	 with content = values.encode();
     fired {
@@ -108,33 +119,33 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
 
   }
 
-  rule delete_image {
-    select when test delete_image
+  rule delete_item {
+    select when test delete_item
     pre {
 
-      image_id = event:attr("image_id");
-      imgName   = makeImgName(image_id);
-      imgURL    = AWSS3:makeAwsUrl(S3Bucket,imgName);
+      item_id = event:attr("item_id");
+      itemName   = makeItemName(item_id);
+      itemURL    = AWSS3:makeAwsUrl(S3Bucket,itemName);
 
       requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T %z");
 
       values = {
         'type' : 'DELETE',
-        'image_id': image_id,
-	'imgURL' : imgURL,
-	'imgType': imgType,
+        'item_id': item_id,
+	'itemURL' : itemURL,
+	'itemType': itemType,
  	'requestTime' : requestTime
       };
     }
 
     {
-       AWSS3:del(S3Bucket, imgName) setting (response)
+       AWSS3:del(S3Bucket, itemName) setting (response)
          with object_type = imgType;
        send_raw("application/json")
     	 with content = values.encode();
     }
     always {
-       raise explicit event store_image_complete;
+       raise explicit event delete_item_complete;
        log "Seeing " + values.encode();
     }   
   }
