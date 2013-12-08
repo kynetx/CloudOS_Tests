@@ -17,16 +17,10 @@ Test the AWS module, a41x174
      //   "AWSSecretKey": "DJ9PonrtNa7zDxvmTvuqy3yfKdgL47Mcea8RLwAS"
      // }
      
-    use module a169x701 alias CloudRain
-    
     use module a41x174 alias AWSS3
       with AWSKeys = keys:aws()
   }
-  dispatch {
-    // Some example dispatch domains
-    // domain "example.com"
-    // domain "other.example.com"
-  }
+
   global {
 
     test_img = <<
@@ -37,22 +31,25 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
       thisRID = meta:rid();
 
 
-      makeItemName   = function(name) {
-         "#{thisRID}/#{name}.img";
+      makeItemName   = function(name, extension) {
+         "#{thisRID}/#{name}.#{extension}";
       };
 
 
 
       imgValue  = this2that:base642string(AWSS3:getValue(test_img)) ;
       imgType   = AWSS3:getType(test_img) ;
+      imgExtension = "img";
 
 
       stringValue = "Now is the time for all good men to come to the aid of their country!"
       stringType = "text/plain";
+      stringExtension = "txt";
 
       // change string to img to try images (comparison not working)
       itemValue = stringValue;
       itemType = stringType;
+      itemExtension = stringExtension;
 
 
   }
@@ -65,7 +62,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
       requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T %z");
 
       item_id  = math:random(99999999);
-      itemName   = makeItemName(item_id);
+      itemName   = makeItemName(item_id, itemExtension);
       itemURL    = AWSS3:makeAwsUrl(S3Bucket,itemName);
 
 
@@ -97,7 +94,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
    pre {
 
       item_id = event:attr("item_id");
-      itemName   = makeItemName(item_id);
+      itemName   = makeItemName(item_id, itemExtension);
       itemURL    = AWSS3:makeAwsUrl(S3Bucket,itemName);
 
       values = {
@@ -130,7 +127,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
     pre {
 
       item_id = event:attr("item_id");
-      itemName   = makeItemName(item_id);
+      itemName   = makeItemName(item_id, itemExtension);
       itemURL    = AWSS3:makeAwsUrl(S3Bucket,itemName);
 
       requestTime = time:strftime(time:now({"tz" : "Europe/London"}), "%a, %d %b %Y %T %z");
