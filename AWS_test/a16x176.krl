@@ -106,13 +106,15 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
     }
 
     if(getItemValue eq itemValue) then
-       send_directive("test compare success")
+       send_directive("test compare success for #{item_id}")
     	 with content = values.encode();
     fired {
       log "Retrieved value equals sent value";
       raise system event test_success with
         timestamp = time:now() and
         name = meta:name();
+      raise explicit event delete_item with
+        item_id = item_id
     } else {
       log "Value mismatch";
       raise system event test_failure with
@@ -124,6 +126,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
 
   rule delete_item {
     select when test delete_item
+             or explicit delete_item
     pre {
 
       item_id = event:attr("item_id");
@@ -144,7 +147,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
     {
        AWSS3:del(S3Bucket, itemName) setting (response)
          with object_type = itemType;
-       send_directive("item delete from Amazon S3")
+       send_directive("delete item #{item_id} from Amazon S3")
     	 with content = values.put({'response': response}).encode();
     }
     always {
