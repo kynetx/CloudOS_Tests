@@ -1,6 +1,6 @@
 ruleset a16x176 {
   meta {
-    name "AWS Test"
+    name "AWSS3 Module Test"
     description <<
 Test the AWS module, a41x174
     >>
@@ -80,8 +80,8 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
 
     {
        AWSS3:upload(S3Bucket, itemName, itemValue) setting (response)
-         with object_type = imgType;
-       send_raw("application/json")
+         with object_type = itemType;
+       send_directive("test initiation")
     	 with content = values.encode();
     }
     always {
@@ -109,12 +109,18 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
     }
 
     if(getItemValue eq itemValue) then
-       send_raw("application/json")
+       send_directive("test compare success")
     	 with content = values.encode();
     fired {
       log "Retrieved value equals sent value";
+      raise system event test_success with
+        timestamp = time:now() and
+        name = meta:name();
     } else {
       log "Value mismatch";
+      raise system event test_failure with
+        timestamp = time:now() and
+        name = meta:name();
     }      
 
   }
@@ -140,9 +146,9 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
 
     {
        AWSS3:del(S3Bucket, itemName) setting (response)
-         with object_type = imgType;
-       send_raw("application/json")
-    	 with content = values.encode();
+         with object_type = itemType;
+       send_directive("item delete from Amazon S3")
+    	 with content = values.put({'response', response}).encode();
     }
     always {
        raise explicit event delete_item_complete;
