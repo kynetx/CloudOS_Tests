@@ -174,7 +174,7 @@ Checks to see that the item deleted in delete_item really got deleted
       itemName   = makeItemName(item_id, itemExtension);
       itemURL    = AWSS3:makeAwsUrl(S3Bucket,itemName);
 
-      itemStatusCode = http:get(itemURL).pick("$.status_code");
+      itemStatusCode = http:get(itemURL).pick("$.status_code").head();
 
       values = {
 	'itemURL' : itemURL,
