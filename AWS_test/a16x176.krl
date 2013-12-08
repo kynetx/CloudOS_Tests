@@ -92,6 +92,9 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
   rule compare_item {
    select when explicit store_item_complete
    pre {
+      test_desc = <<
+Checks to see that the item stored in store_item was really stored
+>>;
 
       item_id = event:attr("item_id");
       itemName   = makeItemName(item_id, itemExtension);
@@ -99,7 +102,8 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
 
       values = {
 	'itemURL' : itemURL,
-        'status': 'success'
+        'status': 'success',
+	'test_descriptions' : test_desc
       };
 
       getItemValue = http:get(itemURL).pick("$.content");
@@ -112,14 +116,16 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
       log "Retrieved value equals sent value";
       raise system event test_success with
         timestamp = time:now() and
-        name = meta:name();
+        test_desc = test_tesc and
+        name = meta:rulesetName();
       raise explicit event delete_item with
         item_id = item_id
     } else {
       log "Value mismatch";
       raise system event test_failure with
         timestamp = time:now() and
-        name = meta:name();
+        test_desc = test_tesc and
+        name = meta:rulesetName();
     }      
 
   }
@@ -151,9 +157,51 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
     	 with content = values.put({'response': response}).encode();
     }
     always {
-       raise explicit event delete_item_complete;
+       raise explicit event delete_item_complete with
+         item_id = item_id;
        log "Seeing " + values.encode();
     }   
+  }
+  
+  rule check_item_delete {
+    select when explicit delete_item_complete
+    pre {
+      test_desc = <<
+Checks to see that the item deleted in delete_item really got deleted
+>>;
+
+      item_id = event:attr("item_id");
+      itemName   = makeItemName(item_id, itemExtension);
+      itemURL    = AWSS3:makeAwsUrl(S3Bucket,itemName);
+
+      itemStatusCode = http:get(itemURL).pick("$.status_code");
+
+      values = {
+	'itemURL' : itemURL,
+	'operation' : 'check item deleted',
+        'status_code' : itemStatusCode,
+	'test_descriptions' : test_desc
+      };
+
+    }
+
+    if(itemStatusCode like '404') then
+       send_directive("test delete success for #{item_id}")
+    	 with content = values.encode();
+    fired {
+      log "Item not found; delete succeeded";
+      raise system event test_success with
+        timestamp = time:now() and
+        test_desc = test_tesc and
+        name = meta:rulesetName();
+    } else {
+      log "Value mismatch";
+      raise system event test_failure with
+        timestamp = time:now() and
+        test_desc = test_tesc and
+        name = meta:rulesetName();
+    }      
+
   }
 
 }
