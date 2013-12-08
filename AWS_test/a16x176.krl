@@ -148,7 +148,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
        AWSS3:del(S3Bucket, itemName) setting (response)
          with object_type = itemType;
        send_directive("item delete from Amazon S3")
-    	 with content = values.put({'response', response}).encode();
+    	 with content = values.put({'response': response}).encode();
     }
     always {
        raise explicit event delete_item_complete;
