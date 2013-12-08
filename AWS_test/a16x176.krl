@@ -116,7 +116,7 @@ Checks to see that the item stored in store_item was really stored
       log "Retrieved value equals sent value";
       raise system event test_success with
         timestamp = time:now() and
-        test_desc = test_tesc and
+        test_desc = test_desc and
         name = meta:rulesetName();
       raise explicit event delete_item with
         item_id = item_id
@@ -124,7 +124,7 @@ Checks to see that the item stored in store_item was really stored
       log "Value mismatch";
       raise system event test_failure with
         timestamp = time:now() and
-        test_desc = test_tesc and
+        test_desc = test_desc and
         name = meta:rulesetName();
     }      
 
