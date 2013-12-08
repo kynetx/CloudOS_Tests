@@ -174,7 +174,7 @@ Checks to see that the item deleted in delete_item really got deleted
       itemName   = makeItemName(item_id, itemExtension);
       itemURL    = AWSS3:makeAwsUrl(S3Bucket,itemName);
 
-      itemStatusCode = http:get(itemURL).pick("$.status_code").head();
+      itemStatusCode = http:get(itemURL).pick("$.status_code");
 
       values = {
 	'itemURL' : itemURL,
@@ -185,7 +185,7 @@ Checks to see that the item deleted in delete_item really got deleted
 
     }
 
-    if(itemStatusCode.match(re/'4\d\d'/)) then
+    if(not itemStatusCode.match(re/'4\d\d'/)) then
        send_directive("test delete success for #{item_id}")
     	 with content = values.encode();
     fired {
