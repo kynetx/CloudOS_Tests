@@ -185,7 +185,7 @@ Checks to see that the item deleted in delete_item really got deleted
 
     }
 
-    if(itemStatusCode like '404') then
+    if(itemStatusCode like '4\d\d') then
        send_directive("test delete success for #{item_id}")
     	 with content = values.encode();
     fired {
