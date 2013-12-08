@@ -151,8 +151,7 @@ Checks to see that the item stored in store_item was really stored
     }
 
     {
-       AWSS3:del(S3Bucket, itemName) setting (response)
-         with object_type = itemType;
+       AWSS3:del(S3Bucket, itemName) setting (response);
        send_directive("delete item #{item_id} from Amazon S3")
     	 with content = values.put({'response': response}).encode();
     }
@@ -192,13 +191,13 @@ Checks to see that the item deleted in delete_item really got deleted
       log "Item not found; delete succeeded";
       raise system event test_success with
         timestamp = time:now() and
-        test_desc = test_tesc and
+        test_desc = test_desc and
         name = meta:rulesetName();
     } else {
       log "Value mismatch";
       raise system event test_failure with
         timestamp = time:now() and
-        test_desc = test_tesc and
+        test_desc = test_desc and
         name = meta:rulesetName();
     }      
 
