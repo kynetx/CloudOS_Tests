@@ -6,7 +6,7 @@ Test the AWS module, a41x174
     >>
     author "Phil Windley"
     logging on
-    
+
     key aws {
        "AWSAccessKey": "0GEYA8DTVCB3XHM819R2",
        "AWSSecretKey": "I4TrjKcflLnchhsEzjlNju/s9EHiqdOScbyqGgn+"
@@ -114,7 +114,7 @@ Checks to see that the item stored in store_item was really stored
     	 with content = values.encode();
     fired {
       log "Retrieved value equals sent value";
-      raise system event test_success with
+      raise test event test_success with
         timestamp = time:now() and
         test_desc = test_desc and
         name = meta:rulesetName();
@@ -122,7 +122,7 @@ Checks to see that the item stored in store_item was really stored
         item_id = item_id
     } else {
       log "Value mismatch";
-      raise system event test_failure with
+      raise test event test_failure with
         timestamp = time:now() and
         test_desc = test_desc and
         name = meta:rulesetName();
@@ -189,13 +189,13 @@ Checks to see that the item deleted in delete_item really got deleted
     	 with content = values.encode();
     fired {
       log "Item not found; delete succeeded";
-      raise system event test_success with
+      raise test event test_success with
         timestamp = time:now() and
         test_desc = test_desc and
         name = meta:rulesetName();
     } else {
       log "Value mismatch";
-      raise system event test_failure with
+      raise test event test_failure with
         timestamp = time:now() and
         test_desc = test_desc and
         name = meta:rulesetName();
