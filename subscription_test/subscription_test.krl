@@ -32,7 +32,7 @@ ruleset subscription_test {
     }
 
     rule start_engine {
-        select when test run_subscription_gymastics
+        select when test run_subscription_gymnastics
         pre {
             pico_1 = pico_factory("Test", "SubscrptionDummy", "");
             pico_2 = pico_factory("Test", "SubscriptionDummy", "");
