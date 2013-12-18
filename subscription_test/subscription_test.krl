@@ -42,6 +42,7 @@ ruleset subscription_test {
         }
 
         {
+            // send off the event into the first pico
             event:send(pico_1_cid, "cloudos", "subscribe")
                 with attrs = {
                     "channelName": "TestSubscriptionChannel",
