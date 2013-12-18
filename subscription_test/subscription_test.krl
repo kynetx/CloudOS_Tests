@@ -103,6 +103,8 @@ ruleset subscription_test {
         }
 
         fired {
+            log "AKO SAYS USERTOKEN:";
+            log ent:userToken;
             log "AKO SAYS:";
             log subs.encode();
         }
