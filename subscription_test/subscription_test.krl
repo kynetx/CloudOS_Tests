@@ -11,7 +11,7 @@ ruleset subscription_test {
 
     global {
 
-        strip_rids = {
+        strip_rids = [
             "a169x625.prod",
             "a169x664.prod",
             "a169x676.prod",
