@@ -41,7 +41,9 @@ ruleset subscription_test {
             
             {
                 "authChannel": pico_auth_channel,
-                "uuid": pico_uuid
+                "uuid": pico_uuid,
+                "status": pico{"status"},
+                "msg": pico{"msg"}
             }
         };
     }
