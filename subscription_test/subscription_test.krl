@@ -69,6 +69,9 @@ ruleset subscription_test {
 
         fired {
             app:testsRun += 1 from 0;
+            log "AKO SAYS:";
+            log pico_1.encode();
+            log pico_2.encode();
         }
     }
 
@@ -94,8 +97,12 @@ ruleset subscription_test {
         }
 
         {
-            send_directive("showTestSubscriptions")
-                with subscriptions = subs;
+            noop();
+        }
+
+        fired {
+            log "AKO SAYS:";
+            log subs.encode();
         }
     }
 }
