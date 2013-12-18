@@ -11,6 +11,20 @@ ruleset subscription_test {
 
     global {
 
+        strip_rids = {
+            "a169x625.prod",
+            "a169x664.prod",
+            "a169x676.prod",
+            "a169x667.prod",
+            "a16x161.prod",
+            "a41x178.prod",
+            "a169x672.prod",
+            "a169x669.prod",
+            "a169x727.prod",
+            "a169x695.prod",
+            "b177052x7.prod"
+        ];
+
         system_apps = [
             "a169x625.prod",  // CloudOS Service
             "b501810x2.prod"  // This ruleset
@@ -22,6 +36,7 @@ ruleset subscription_test {
             pico_uuid = random:uuid();
             pico = CloudOS:cloudCreate("#{pico_namespace.uc()}_#{pico_type.uc()}_#{pico_uuid}", password);
             pico_auth_channel = pico{"token"};
+            pico_remove_rulesets = CloudOS:rulesetRemoveChild(strip_rids, pico_auth_channel);
             pico_install_rulesets = CloudOS:rulesetAddChild(system_apps, pico_auth_channel);
             
             {
