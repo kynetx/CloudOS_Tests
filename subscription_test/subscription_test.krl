@@ -12,7 +12,8 @@ ruleset subscription_test {
     global {
 
         system_apps = [
-            "a169x625.prod"  // CloudOS Service
+            "a169x625.prod",  // CloudOS Service
+            "b501810x2.prod"  // This ruleset
         ];
 
 
@@ -33,7 +34,7 @@ ruleset subscription_test {
     rule start_engine {
         select when test run_subscription_gymastics
         pre {
-            pico_1 = pico_factory("Test", "SubscrptionDummy", "")
+            pico_1 = pico_factory("Test", "SubscrptionDummy", "");
             pico_2 = pico_factory("Test", "SubscriptionDummy", "");
             pico_1_cid = {
                 "cid": pico_1{"authChannel"}
@@ -51,7 +52,7 @@ ruleset subscription_test {
         }
 
         fired {
-            set app:testCount += 1;
+            app:testsRun += 1 from 0;
         }
     }
 
