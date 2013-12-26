@@ -12,15 +12,21 @@ Functions and actions to make tests easier
 
   global {
 
-    test_success = defaction(msg, values) {
+    success = defaction(msg, values) {
       send_directive(msg)
     	 with status = "success" and
 	      content = values.encode();
     }
 
-    test_failure = defaction(msg, values) {
+    failure = defaction(msg, values) {
       send_directive(msg)
     	 with status = "failure" and
+	      content = values.encode();
+    }
+
+    diag = defaction(msg, values) {
+      send_directive(msg)
+	with status = "diagnostic" and
 	      content = values.encode();
     }
 
