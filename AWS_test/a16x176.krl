@@ -112,23 +112,23 @@ Checks to see that the item stored in store_item was really stored
     }
 
     if(getItemValue eq itemValue) then
-       show_test:succeeds("test compare success for #{item_id}")
+       show_test:diag("test compare success for #{item_id}")
          with values = values and
               desc = test_desc
     fired {
-      log "Retrieved value equals sent value";
-      raise test event test_succeeds with
-        timestamp = time:now() and
+      raise test event succeeds with
         test_desc = test_desc and
-        name = meta:rulesetName();
+        rulename = meta:ruleName() and
+	msg = "Retrieved value equals sent value. Test compare success for #{item_id}" and
+	details = values;
       raise explicit event delete_item with
         item_id = item_id
     } else {
-      log "Value mismatch";
-      raise test event test_fails with
-        timestamp = time:now() and
+      raise test event fails with
         test_desc = test_desc and
-        name = meta:rulesetName();
+        rulename = meta:ruleName() and
+	msg = "Value mismatch. Test compare failed for #{item_id}" and
+	details = values
     }      
 
   }
@@ -188,21 +188,21 @@ Checks to see that the item deleted in delete_item really got deleted
     }
 
     if(itemStatusCode eq "403") then
-       show_test:succeeds("test delete success for #{item_id}")
+       show_test:diag("test delete success for #{item_id}")
          with values = values and
               desc = test_desc;
     fired {
-      log "Item not found; delete succeeded";
-      raise test event test_succeeds with
-        timestamp = time:now() and
+      raise test event succeeds with
         test_desc = test_desc and
-        name = meta:rulesetName();
+        rulename = meta:ruleName() and
+	msg = "Item #{item_id} not found; delete succeeded" and
+	details = values
     } else {
-      log "Value mismatch";
-      raise test event test_fails with
-        timestamp = time:now() and
+      raise test event fails with
         test_desc = test_desc and
-        name = meta:rulesetName();
+        rulename = meta:ruleName() and
+	msg = "Item #{item_id} found; delete failed" and
+	details = values
     }      
 
   }

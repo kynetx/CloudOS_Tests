@@ -23,12 +23,34 @@ Functions and actions to make writing KRL tests easier
 	      content = values.encode();
     }
 
-    diag = defaction(msg) {
+    diag = defaction(msg, values) {
       send_directive(msg)
 	with status = "diagnostic" and
 	      content = values.encode();
     }
 
+  }
+
+  rule see_success {
+    select when test succeeds
+
+    send_directive(event:attr("test_desc"))
+         with status = "success" and
+	      timestamp = time:now() and
+	      rule = meta:callingRID() + ":" + event:attr("rulename") and
+              msg = event:attr("msg") and
+	      details = values.encode();
+  }
+
+  rule see_failure {
+    select when test fails
+
+    send_directive(event:attr("test_desc"))
+         with status = "failure" and
+	      timestamp = time:now() and
+	      rule = meta:callingRID() + ":" + event:attr("rulename") and
+              msg = event:attr("msg") and
+	      details = values.encode();
   }
 
 }
