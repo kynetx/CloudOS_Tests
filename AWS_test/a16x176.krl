@@ -79,8 +79,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
     {
        AWSS3:upload(S3Bucket, itemName, itemValue) setting (response)
          with object_type = itemType;
-       show_test:diag("test initiation and initialization")
-         with values = values
+       show_test:diag("test initiation and initialization", values);
 
     }
     always {
@@ -112,9 +111,8 @@ Checks to see that the item stored in store_item was really stored
     }
 
     if(getItemValue eq itemValue) then
-       show_test:diag("test compare success for #{item_id}")
-         with values = values and
-              desc = test_desc
+       show_test:diag("test compare success for #{item_id}", values)
+         with desc = test_desc
     fired {
       raise test event succeeds with
         test_desc = test_desc and
@@ -155,8 +153,8 @@ Checks to see that the item stored in store_item was really stored
 
     {
        AWSS3:del(S3Bucket, itemName) setting (response);
-       show_test:diag("delete item #{item_id} from Amazon S3")
-         with values = values.put({'response': response});
+       show_test:diag("delete item #{item_id} from Amazon S3",
+                      values.put({'response': response}));
     }
     always {
        raise explicit event delete_item_complete with
@@ -188,9 +186,8 @@ Checks to see that the item deleted in delete_item really got deleted
     }
 
     if(itemStatusCode eq "403") then
-       show_test:diag("test delete success for #{item_id}")
-         with values = values and
-              desc = test_desc;
+       show_test:diag("test delete success for #{item_id}", values)
+         with desc = test_desc;
     fired {
       raise test event succeeds with
         test_desc = test_desc and
