@@ -7,6 +7,8 @@ Functions and actions to make tests easier
     author "Phil Windley"
     logging on
 
+
+    provides success, failure, diag
      
   }
 
