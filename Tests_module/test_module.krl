@@ -1,14 +1,12 @@
-ruleset  {
+ruleset test_module {
   meta {
     name "Test Functions and Actions"
     description <<
 Functions and actions to make writing KRL tests easier
-    >>
+>>
     author "Phil Windley"
     logging on
-
-    provide succeeds, fails, diag
-     
+    provides succeeds, fails, diag
   }
 
   global {
