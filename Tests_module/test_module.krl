@@ -7,19 +7,19 @@ Functions and actions to make writing KRL tests easier
     author "Phil Windley"
     logging on
 
-    provide success, failure, diag
+    provide succeeds, fails, diag
      
   }
 
   global {
 
-    success = defaction(msg, values) {
+    succeeds = defaction(msg, values) {
       send_directive(msg)
     	 with status = "success" and
 	      content = values.encode();
     }
 
-    failure = defaction(msg, values) {
+    fails = defaction(msg, values) {
       send_directive(msg)
     	 with status = "failure" and
 	      content = values.encode();
