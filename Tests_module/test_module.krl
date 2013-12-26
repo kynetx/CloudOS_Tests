@@ -2,7 +2,7 @@ ruleset  {
   meta {
     name "Test Functions and Actions"
     description <<
-Functions and actions to make tests easier
+Functions and actions to make writing KRL tests easier
     >>
     author "Phil Windley"
     logging on
