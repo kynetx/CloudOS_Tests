@@ -11,22 +11,22 @@ Functions and actions to make writing KRL tests easier
 
   global {
 
-    succeeds = defaction(msg) {
+    succeeds = defaction(msg, values) {
       send_directive(msg)
     	 with status = "success" and
-	      content = values.encode();
+	      details = values.encode();
     }
 
-    fails = defaction(msg) {
+    fails = defaction(msg, values) {
       send_directive(msg)
     	 with status = "failure" and
-	      content = values.encode();
+	      details = values.encode();
     }
 
     diag = defaction(msg, values) {
       send_directive(msg)
 	with status = "diagnostic" and
-	      content = values.encode();
+	      details = values.encode();
     }
 
   }
