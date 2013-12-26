@@ -39,7 +39,7 @@ Functions and actions to make writing KRL tests easier
 	      timestamp = time:now() and
 	      rule = meta:callingRID() + ":" + event:attr("rulename") and
               msg = event:attr("msg") and
-	      details = values.encode();
+	      details = event:attr("details").encode();
   }
 
   rule see_failure {
@@ -50,7 +50,7 @@ Functions and actions to make writing KRL tests easier
 	      timestamp = time:now() and
 	      rule = meta:callingRID() + ":" + event:attr("rulename") and
               msg = event:attr("msg") and
-	      details = values.encode();
+	      details = event:attr("details").encode();
   }
 
 }
