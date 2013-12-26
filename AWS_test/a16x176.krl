@@ -79,7 +79,7 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACaCAYAAAAuLkPmAAAKQWlDQ1BJQ0
     {
        AWSS3:upload(S3Bucket, itemName, itemValue) setting (response)
          with object_type = itemType;
-       show_test:diag("test initiation")
+       show_test:diag("test initiation and initialization")
          with values = values
 
     }
